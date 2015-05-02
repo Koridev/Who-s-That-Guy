@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">"Who's That Guy?"</string>
+
+    <string name="action_about">About</string>
+    <string name="title_activity_about">About</string>
+    <string name="seen_in">"Appearances"</string>
+    <string name="search_hint">Search for a movie or a TV show</string>
+    <string name="empty_actor">"Start by entering the title of a movie or a TV show to find its cast"</string>
+    <string name="empty_movie">"Enter the title"</string>
+    <string name="no_actor">"Oops, no actor found for this movie"</string>
+    <string name="no_movie">"Oops, no movie found by that title"</string>
+    <string name="movie_count_start">"Results: "</string>
+    <string name="movie_count_end">" matches"</string>
+    <string name="themoviedborg">"http://themoviedb.org"</string>
+
+    <string name="app_version">"v0.1"</string>
+    <string name="dev_mail">"guillaumeb90@gmail.com"</string>
+    <string name="ask_report">Thank you for reporting any bug or suggestion!</string>
+</resources>

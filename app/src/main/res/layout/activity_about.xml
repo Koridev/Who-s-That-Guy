@@ -1,0 +1,102 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="io.korigan.whosthatguy.ui.activity.AboutActivity">
+
+    <android.support.v7.widget.Toolbar
+        app:theme="@style/WTG.ActionBar"
+        android:background="@color/primary"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/tv_app_title"
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Who's That Guy"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/WTG.Text.Large"/>
+
+        <TextView
+            android:id="@+id/tv_app_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_version"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/WTG.Text.Medium"/>
+
+        <TextView
+            android:id="@+id/tv_dev_name"
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Developed by Guillaume BERNARD"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/WTG.Text.Medium"/>
+        <TextView
+            android:id="@+id/tv_dev_mail"
+            android:layout_marginTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="email"
+            android:text="@string/dev_mail"
+            android:linksClickable="true"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/WTG.Text.Medium"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingRight="25dp"
+            android:paddingLeft="25dp"
+            android:text="@string/ask_report"
+            android:gravity="center_horizontal"
+            android:textAppearance="@style/WTG.Text.Medium"/>
+
+
+        <TextView
+            android:id="@+id/tv_mdb_info"
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All content provided by themoviedb.org"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/WTG.Text.Medium"/>
+
+        <ImageView
+            android:id="@+id/img_moviedb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo_themoviedborg"
+            android:layout_gravity="center_horizontal"
+            android:tint="@color/text_normal"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
+

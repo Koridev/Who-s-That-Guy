@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="apikey">"1134f65c79923191039184b2b8e082d0"</string>
+    <string name="endpoint_tmdb">"https://api.themoviedb.org/3"</string>
+    <string name="endpoint_tmdb_img">"http://image.tmdb.org/t/p"</string>
+</resources>

@@ -1,0 +1,163 @@
+<FrameLayout
+    android:id="@+id/main_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout
+            android:id="@+id/search_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/toolbar"
+            android:padding="5dp"
+            android:background="@drawable/bg_border_bot">
+
+            <View
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_action_search"
+                android:id="@+id/ic_search" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_centerVertical="true"
+                android:hint="@string/search_hint"
+                android:id="@+id/et_search"
+                android:textColor="@drawable/search_text_color"
+                android:inputType="text|textCapSentences"
+                android:imeOptions="actionSearch"
+                android:background="@android:color/transparent"
+                android:nextFocusUp="@id/et_search"
+                android:nextFocusLeft="@id/et_search"
+                android:layout_toLeftOf="@+id/ic_edit"
+                android:layout_toStartOf="@+id/ic_edit"
+                android:layout_toEndOf="@+id/ic_search"
+                android:layout_toRightOf="@+id/ic_search"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true" />
+
+            <View
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_edit"
+                android:id="@+id/ic_edit"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+
+        <include
+            android:id="@+id/view_no_actor"
+            layout="@layout/view_no_actor"
+            android:visibility="invisible"/>
+
+        <include
+            android:id="@+id/empty_container"
+            layout="@layout/view_empty_actor"
+            android:visibility="invisible"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_actors"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/search_container" />
+
+        <android.support.v7.widget.Toolbar
+            app:theme="@style/WTG.ActionBar"
+            android:background="@color/primary"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:popupTheme="@style/WTG.PopupTheme"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/search_mode_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="120dp"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_border"
+
+            android:paddingTop="1dp">
+
+            <TextView
+                android:id="@+id/tv_movie_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="5dp"
+                android:gravity="center"
+                android:background="@drawable/bg_border_bot"
+                android:visibility="invisible"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_movies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/search_empty_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:layout_centerHorizontal="true">
+
+            <View
+                android:id="@+id/ic_search_empty"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_action_search"/>
+
+            <TextView
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ic_search_empty"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:text="@string/empty_movie"/>
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_movies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="60dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"/>
+
+
+    </RelativeLayout>
+
+</FrameLayout>
