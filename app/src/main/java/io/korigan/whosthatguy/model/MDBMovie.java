@@ -9,9 +9,7 @@ import java.util.Date;
  * Created by guillaume on 23/04/15.
  */
 @Parcel
-public class MDBMovie {
-
-
+public class MDBMovie extends MDBMedia{
     public String id;
     private String original_title;
     private String title;
@@ -19,7 +17,6 @@ public class MDBMovie {
     private String original_name;
     private float vote_average;
     private String poster_path;
-    private String media_type;
     private Date release_date;
     private Date first_air_date;
 

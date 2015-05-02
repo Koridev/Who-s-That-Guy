@@ -28,6 +28,9 @@
             android:name=".ui.activity.AboutActivity"
             android:label="@string/title_activity_about" >
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="1d2663d601ddf02367fac4acff989cf1eea05f13" />
     </application>
 
 </manifest>

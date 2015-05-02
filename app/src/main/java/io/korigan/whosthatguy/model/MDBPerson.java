@@ -1,9 +1,12 @@
 package io.korigan.whosthatguy.model;
 
+import org.parceler.Parcel;
+
 /**
  * Created by guillaume on 23/04/15.
  */
-public class MDBPerson {
+@Parcel
+public class MDBPerson extends MDBMedia{
     public String id;
     public String biography;
     public String birthday;

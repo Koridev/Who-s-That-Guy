@@ -9,6 +9,7 @@ public class MDBUtils {
 
     public static final String TV = "tv";
     public static final String MOVIE = "movie";
+    public static final String PERSON = "person";
 
     public static SimpleDateFormat displayFormat = new SimpleDateFormat("MM/dd/yyyy");
 

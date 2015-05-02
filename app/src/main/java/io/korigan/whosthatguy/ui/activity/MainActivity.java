@@ -26,8 +26,8 @@ import java.util.Arrays;
 import io.korigan.whosthatguy.R;
 import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBCredits;
+import io.korigan.whosthatguy.model.MDBMediaSearch;
 import io.korigan.whosthatguy.model.MDBMovie;
-import io.korigan.whosthatguy.model.MDBMovieSearch;
 import io.korigan.whosthatguy.network.MovieDBService;
 import io.korigan.whosthatguy.ui.adapter.ActorAdapter;
 import io.korigan.whosthatguy.ui.adapter.MovieAdapter;
@@ -72,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
 
     //State
     private MDBMovie mSelectedMovie;
-    private MDBMovieSearch mMovieSearch;
+    private MDBMediaSearch mMovieSearch;
     private MDBCredits mCredits;
 
     private MovieDBService mTMDBService;
@@ -108,8 +108,9 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         mICEdit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
                 unlockMovie();
+                mETSearch.performClick();
+                openKeyboard();
             }
         });
 
@@ -146,11 +147,11 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
                 mPBMovies.setVisibility(View.VISIBLE);
                 mTVMovieCount.setVisibility(View.INVISIBLE);
                 closeKeyboard();
-                mTMDBService.movieSearch(getString(R.string.apikey), v.getText().toString(), new Callback<MDBMovieSearch>(){
+                mTMDBService.mediaSearch(getString(R.string.apikey), v.getText().toString(), new Callback<MDBMediaSearch>() {
 
                     @Override
-                    public void success(MDBMovieSearch movieSearch, Response response) {
-                        setMovieSearch(movieSearch);
+                    public void success(MDBMediaSearch movieSearch, Response response) {
+                        setMediaSearch(movieSearch);
                     }
 
                     @Override
@@ -175,7 +176,7 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
             b.putParcelable(SELECTED_MOVIE, Parcels.wrap(MDBMovie.class, mSelectedMovie));
         }
         if(mMovieSearch != null){
-            b.putParcelable(LAST_MOVIE_SEARCH, Parcels.wrap(MDBMovieSearch.class, mMovieSearch));
+            b.putParcelable(LAST_MOVIE_SEARCH, Parcels.wrap(MDBMediaSearch.class, mMovieSearch));
         }
         if(mCredits != null){
             b.putParcelable(MOVIE_CREDITS, Parcels.wrap(MDBCredits.class, mCredits));
@@ -201,7 +202,7 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         if(pMovieSearch != null){
             mMovieSearch = Parcels.unwrap(pMovieSearch);
             if(mMoviePanelIsShown){
-                setMovieSearch(mMovieSearch);
+                setMediaSearch(mMovieSearch);
             }
         }
 
@@ -240,16 +241,16 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
                 });
     }
 
-    private void setMovieSearch(MDBMovieSearch movieSearch){
-        mMovieSearch = movieSearch;
+    private void setMediaSearch(MDBMediaSearch mediaSearch){
+        mMovieSearch = mediaSearch;
         mPBMovies.setVisibility(View.INVISIBLE);
-        mMovieAdapter.setMovieList(Arrays.asList(movieSearch.results));
+        mMovieAdapter.setMediaList(mediaSearch.getMediaList());
         mMovieAdapter.notifyDataSetChanged();
 
-        if(movieSearch.total_results > 0) {
+        if(mediaSearch.getMediaCount() > 0) {
             mTVMovieCount.setText(
                     getString(R.string.movie_count_start)+
-                            movieSearch.total_results+
+                            mediaSearch.getMediaCount()+
                             getString(R.string.movie_count_end));
             mSearchEmptyView.setVisibility(View.INVISIBLE);
 
@@ -340,14 +341,8 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
     }
 
     private void lockMovie(MDBMovie movie){
-//        mETSearch.setEllipsize(TextUtils.TruncateAt.END);
-//        mETSearch.getEditableText().clear();
-//        mETSearch.getEditableText().append(movie.getTitle());
         mETSearch.setText(movie.getTitle());
-//        mETSearch.clearComposingText();
-//        mETSearch.setSelection(0);
         mETSearch.setEnabled(false);
-
         mICEdit.setVisibility(View.VISIBLE);
         mICSearch.setVisibility(View.INVISIBLE);
 
@@ -370,6 +365,11 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
     private void closeKeyboard(){
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mETSearch.getWindowToken(), 0);
+    }
+
+    private void openKeyboard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInputFromWindow(mETSearch.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
     }
 
     @Override
