@@ -1,6 +1,7 @@
 package io.korigan.whosthatguy.ui.activity;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -288,7 +289,21 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
                 .alpha(1)
                 .setDuration(300)
                 .setInterpolator(new DecelerateInterpolator())
-                .setListener(null)
+                .setListener(new AnimatorListenerAdapter(){
+                    private int mLayerType;
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        mLayerType = mMovieSearchContainer.getLayerType();
+                        mMovieSearchContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        mMovieSearchContainer.setLayerType(mLayerType, null);
+                    }
+                })
                 .start();
 
         mMoviePanelIsShown = true;
@@ -303,23 +318,28 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
                 .alpha(0)
                 .setDuration(300)
                 .setInterpolator(new DecelerateInterpolator())
-                .setListener(new Animator.AnimatorListener() {
-
+                .setListener(new AnimatorListenerAdapter() {
+                    private int mLayerType;
                     @Override
-                    public void onAnimationStart(Animator animation) {}
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        mLayerType = mMovieSearchContainer.getLayerType();
+                        mMovieSearchContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                    }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        mMovieSearchContainer.setLayerType(mLayerType, null);
                         cleanMoviePanel();
                     }
 
                     @Override
                     public void onAnimationCancel(Animator animation) {
+                        super.onAnimationCancel(animation);
+                        mMovieSearchContainer.setLayerType(mLayerType, null);
                         cleanMoviePanel();
                     }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {}
                 })
                 .start();
 
