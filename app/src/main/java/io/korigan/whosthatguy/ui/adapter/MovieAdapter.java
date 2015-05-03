@@ -1,6 +1,8 @@
 package io.korigan.whosthatguy.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import io.korigan.whosthatguy.R;
 import io.korigan.whosthatguy.model.MDBMedia;
 import io.korigan.whosthatguy.model.MDBMovie;
 import io.korigan.whosthatguy.model.MDBPerson;
+import io.korigan.whosthatguy.ui.activity.ActorDetailActivity;
 import io.korigan.whosthatguy.util.OnMovieClickListener;
 
 /**
@@ -83,6 +86,16 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         else if(media instanceof MDBPerson){
             ((ActorHolder) holder).bindData((MDBPerson)media);
+            ((ActorHolder) holder).itemView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, ActorDetailActivity.class);
+                    intent.putExtra(ActorDetailActivity.ACTOR_ID, media.id);
+                    mContext.startActivity(intent);
+                    ((ActionBarActivity)mContext).overridePendingTransition(R.transition.slide_right_in, R.transition.hold);
+                }
+            });
 
         }
     }
