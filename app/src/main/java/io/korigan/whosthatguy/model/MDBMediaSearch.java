@@ -4,6 +4,7 @@ import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,10 +18,10 @@ public class MDBMediaSearch {
     public int total_results;
 
     public List<MDBMedia> getMediaList(){
-        return Arrays.asList(results);
+        return new LinkedList<>(Arrays.asList(results));
     }
 
     public int getMediaCount(){
-        return results.length;
+        return total_results;
     }
 }

@@ -15,6 +15,8 @@ import retrofit.http.Query;
 public interface MovieDBService {
     @GET("/search/multi")
     void mediaSearch(@Query("api_key") String apiKey, @Query("query") String title, Callback<MDBMediaSearch> cb);
+    @GET("/search/multi")
+    void mediaSearchByPage(@Query("api_key") String apiKey, @Query("query") String title, @Query("page") int page, Callback<MDBMediaSearch> cb);
     @GET("/{type}/{id}/credits")
     void movieCredits(@Query("api_key") String apiKey, @Path("type") String type, @Path("id") String id, Callback<MDBCredits> cb);
     @GET("/person/{id}")

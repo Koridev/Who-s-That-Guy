@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import io.korigan.whosthatguy.R;
 import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBCredits;
@@ -73,13 +78,16 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
 
     //State
     private MDBMovie mSelectedMovie;
-    private MDBMediaSearch mMovieSearch;
+//    private MDBMediaSearch mMovieSearch;
+    private List<MDBMediaSearch> mMediaSearches;
     private MDBCredits mCredits;
 
     private MovieDBService mTMDBService;
 
     private boolean mMoviePanelIsShown = false;
     private boolean mMovieIsLocked = false;
+
+    private String mCurrentQuery;
 
 
     @Override
@@ -144,15 +152,56 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         mETSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                mCurrentQuery = v.getText().toString();
+                final String query = v.getText().toString();
                 mSearchEmptyView.setVisibility(View.INVISIBLE);
                 mPBMovies.setVisibility(View.VISIBLE);
                 mTVMovieCount.setVisibility(View.INVISIBLE);
                 closeKeyboard();
-                mTMDBService.mediaSearch(getString(R.string.apikey), v.getText().toString(), new Callback<MDBMediaSearch>() {
+                mMediaSearches.clear();
+                mTMDBService.mediaSearch(getString(R.string.apikey), query,
+                        new Callback<MDBMediaSearch>() {
 
                     @Override
                     public void success(MDBMediaSearch movieSearch, Response response) {
+                        mMediaSearches.add(movieSearch);
                         setMediaSearch(movieSearch);
+
+                        if(movieSearch.total_pages > 1){
+//                            for(int i=1; i<movieSearch.total_pages; i++){
+                            mTMDBService.mediaSearchByPage(getString(R.string.apikey),
+                                    query,
+                                    2,
+                                    new Callback<MDBMediaSearch>(){
+
+                                        private int mPage = 2;
+                                       @Override
+                                        public void success(MDBMediaSearch mdbMediaSearch, Response response) {
+                                            if(mCurrentQuery.equals(query)){
+                                                Log.d("MainActivity", "append media search");
+                                                mMediaSearches.add(mdbMediaSearch);
+                                                addMediaSearch(mdbMediaSearch);
+
+                                                mPage++;
+                                                if(mPage <= mdbMediaSearch.total_pages){
+                                                    mTMDBService.mediaSearchByPage(getString(R.string.apikey),
+                                                            query,
+                                                            mPage,
+                                                            this);
+                                                }
+                                            }
+                                           else{
+                                                Log.d("MainActivity", "current media changed while previous did not finish");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void failure(RetrofitError error) {
+                                            Toast.makeText(MainActivity.this, "Oups...", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    });
+                        }
                     }
 
                     @Override
@@ -166,6 +215,8 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
             }
         });
 
+        mMediaSearches = new ArrayList<>();
+
     }
 
     @Override
@@ -176,8 +227,8 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         if(mSelectedMovie != null){
             b.putParcelable(SELECTED_MOVIE, Parcels.wrap(MDBMovie.class, mSelectedMovie));
         }
-        if(mMovieSearch != null){
-            b.putParcelable(LAST_MOVIE_SEARCH, Parcels.wrap(MDBMediaSearch.class, mMovieSearch));
+        if(!mMediaSearches.isEmpty()){
+            b.putParcelable(LAST_MOVIE_SEARCH, Parcels.wrap(mMediaSearches));
         }
         if(mCredits != null){
             b.putParcelable(MOVIE_CREDITS, Parcels.wrap(MDBCredits.class, mCredits));
@@ -200,10 +251,21 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
             lockMovie(mSelectedMovie);
         }
         Parcelable pMovieSearch = b.getParcelable(LAST_MOVIE_SEARCH);
+//        if(pMovieSearch != null){
+//            mMovieSearch = Parcels.unwrap(pMovieSearch);
+//            if(mMoviePanelIsShown){
+//                setMediaSearch(mMovieSearch);
+//            }
+//        }
         if(pMovieSearch != null){
-            mMovieSearch = Parcels.unwrap(pMovieSearch);
-            if(mMoviePanelIsShown){
-                setMediaSearch(mMovieSearch);
+            mMediaSearches = Parcels.unwrap(pMovieSearch);
+            if(mMoviePanelIsShown && !mMediaSearches.isEmpty()){
+                setMediaSearch(mMediaSearches.get(0));
+                if(mMediaSearches.size() > 1){
+                    for(int i=1;i< mMediaSearches.size();i++){
+                        addMediaSearch(mMediaSearches.get(i));
+                    }
+                }
             }
         }
 
@@ -243,9 +305,8 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
     }
 
     private void setMediaSearch(MDBMediaSearch mediaSearch){
-        mMovieSearch = mediaSearch;
         mPBMovies.setVisibility(View.INVISIBLE);
-        mMovieAdapter.setMediaList(mediaSearch.getMediaList());
+        mMovieAdapter.setMediaList(mediaSearch.getMediaList(), mediaSearch.total_results);
         mMovieAdapter.notifyDataSetChanged();
 
         if(mediaSearch.getMediaCount() > 0) {
@@ -262,6 +323,11 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         }
 
         mTVMovieCount.setVisibility(View.VISIBLE);
+    }
+
+    private void addMediaSearch(MDBMediaSearch mediaSearch){
+        mMovieAdapter.addMediaList(mediaSearch.getMediaList());
+        mMovieAdapter.notifyDataSetChanged();
     }
 
     private void setCast(MDBCredits credits){
@@ -356,8 +422,8 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         mMovieSearchContainer.setVisibility(View.INVISIBLE);
         mMovieAdapter.clear();
         mMovieAdapter.notifyDataSetChanged();
-
-        mMovieSearch = null;
+//        mMovieSearch = null;
+        mMediaSearches.clear();
     }
 
     private void lockMovie(MDBMovie movie){
@@ -365,7 +431,6 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         mETSearch.setEnabled(false);
         mICEdit.setVisibility(View.VISIBLE);
         mICSearch.setVisibility(View.INVISIBLE);
-
         mMovieIsLocked = true;
     }
 
@@ -373,14 +438,11 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
     private void unlockMovie(){
         mETSearch.setEnabled(true);
         mETSearch.getEditableText().clear();
-
         mICEdit.setVisibility(View.GONE);
         mICSearch.setVisibility(View.VISIBLE);
 
         mMovieIsLocked = false;
     }
-
-
 
     private void closeKeyboard(){
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

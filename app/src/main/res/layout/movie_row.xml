@@ -11,6 +11,7 @@
         android:id="@+id/img_poster" />
 
     <RelativeLayout
+        android:id="@+id/info_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -42,5 +43,11 @@
             android:id="@+id/tv_info"/>
 
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

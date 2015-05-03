@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -31,6 +32,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private List<MDBMedia> mMediaList;
     private Context mContext;
     private OnMovieClickListener mMovieClickListener;
+    private int mTotalResult;
 
     public MovieAdapter(Context context, OnMovieClickListener omcl) {
         super();
@@ -39,13 +41,18 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         mMovieClickListener = omcl;
     }
 
-    public void setMediaList(List<MDBMedia> list) {
+    public void setMediaList(List<MDBMedia> list, int totalResult) {
         mMediaList = list;
+        mTotalResult = totalResult;
+    }
+
+    public void addMediaList(List<MDBMedia> list){
+        mMediaList.addAll(list);
     }
 
     public void clear() {
-
-        mMediaList = new ArrayList<MDBMedia>();
+        mMediaList = new ArrayList<>();
+        mTotalResult = 0;
     }
 
     public MDBMedia getMedia(int position){
@@ -62,7 +69,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position){
-        if(mMediaList.get(position) instanceof MDBMovie){
+        if(position >= mMediaList.size() ||mMediaList.get(position) == null || mMediaList.get(position) instanceof MDBMovie){
             return 0;
         }
         else if(mMediaList.get(position) instanceof MDBPerson){
@@ -73,11 +80,14 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+
+        if(position >= mMediaList.size() || mMediaList.get(position) == null){
+            ((MovieHolder) holder).setLoading();
+        }
         final MDBMedia media = mMediaList.get(position);
         if(media instanceof MDBMovie) {
             ((MovieHolder) holder).bindData((MDBMovie)media);
             ((MovieHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     mMovieClickListener.onMovieClick((MDBMovie)media);
@@ -102,28 +112,44 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mMediaList.size();
+        return mTotalResult;
     }
 
     private static class MovieHolder extends RecyclerView.ViewHolder{
 
         private Context mContext;
         private ViewGroup mItemView;
+        private View mInfoContainer;
+        private ProgressBar mProgressBar;
+        private ImageView mImgProfile;
+
 
         public MovieHolder(Context ctx, View itemView) {
             super(itemView);
             mContext = ctx;
             mItemView = (ViewGroup) itemView;
+            mInfoContainer = itemView.findViewById(R.id.info_container);
+            mProgressBar = (ProgressBar) itemView.findViewById(R.id.progress_bar);
+            mImgProfile = (ImageView)mItemView.findViewById(R.id.img_poster);
         }
 
         public void bindData(MDBMovie m){
+            mProgressBar.setVisibility(View.INVISIBLE);
+            mInfoContainer.setVisibility(View.VISIBLE);
+            mImgProfile.setVisibility(View.VISIBLE);
             ((TextView)mItemView.findViewById(R.id.tv_title)).setText(m.getTitle());
             ((TextView)mItemView.findViewById(R.id.tv_info)).setText(m.getReleaseDate());
             Picasso.with(mContext)
                     .load(mContext.getString(R.string.endpoint_tmdb_img)+"/w300"+m.getPosterPath())
                     .centerCrop()
                     .fit()
-                    .into((ImageView)mItemView.findViewById(R.id.img_poster));
+                    .into(mImgProfile);
+        }
+
+        public void setLoading(){
+            mProgressBar.setVisibility(View.VISIBLE);
+            mInfoContainer.setVisibility(View.INVISIBLE);
+            mImgProfile.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -132,13 +158,16 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private Context mContext;
         private ViewGroup mItemView;
 
+
         public ActorHolder(Context ctx, View itemView) {
             super(itemView);
             mContext = ctx;
             mItemView = (ViewGroup) itemView;
+
         }
 
         public void bindData(MDBPerson m){
+            itemView.findViewById(R.id.progress_bar).setVisibility(View.INVISIBLE);
             ((TextView)mItemView.findViewById(R.id.tv_title)).setText(m.name);
             ((TextView)mItemView.findViewById(R.id.tv_info)).setText(m.homepage);
             Picasso.with(mContext)

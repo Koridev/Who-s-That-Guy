@@ -41,6 +41,7 @@ public class WhosThatGuyApp extends Application {
                     final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     @Override
                     public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                        if(json.getAsString().isEmpty()) return null;
                         try {
                             return df.parse(json.getAsString());
                         } catch (final Exception e) {
