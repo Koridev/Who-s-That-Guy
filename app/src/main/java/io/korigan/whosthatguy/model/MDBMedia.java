@@ -7,5 +7,7 @@ import org.parceler.Parcel;
  */
 @Parcel
 public class MDBMedia {
+
+    public String id;
     public String media_type;
 }

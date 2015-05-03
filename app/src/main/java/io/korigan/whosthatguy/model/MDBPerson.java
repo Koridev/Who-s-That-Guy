@@ -7,7 +7,6 @@ import org.parceler.Parcel;
  */
 @Parcel
 public class MDBPerson extends MDBMedia{
-    public String id;
     public String biography;
     public String birthday;
     public String homepage;

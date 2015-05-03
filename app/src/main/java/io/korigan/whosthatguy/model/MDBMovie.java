@@ -10,7 +10,6 @@ import java.util.Date;
  */
 @Parcel
 public class MDBMovie extends MDBMedia{
-    public String id;
     private String original_title;
     private String title;
     private String name;
