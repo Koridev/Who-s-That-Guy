@@ -20,6 +20,7 @@ import java.util.List;
 import io.korigan.whosthatguy.R;
 import io.korigan.whosthatguy.model.MDBCast;
 import io.korigan.whosthatguy.ui.activity.ActorDetailActivity;
+import io.korigan.whosthatguy.ui.transformation.CircleTransformation;
 
 
 /**
@@ -103,6 +104,7 @@ public class ActorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         .centerCrop()
                         .fit()
                         .error(R.drawable.ic_person)
+                        .transform(new CircleTransformation())
                         .into(mImgProfile);
             }
             else{

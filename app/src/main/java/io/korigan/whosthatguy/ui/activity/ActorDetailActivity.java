@@ -18,6 +18,7 @@ import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBActorCreditsList;
 import io.korigan.whosthatguy.network.MovieDBService;
 import io.korigan.whosthatguy.model.MDBPerson;
+import io.korigan.whosthatguy.ui.transformation.CircleTransformation;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -80,6 +81,7 @@ public class ActorDetailActivity extends ActionBarActivity {
                                     .centerCrop()
                                     .fit()
                                     .error(R.drawable.ic_person_big)
+                                    .transform(new CircleTransformation())
                                     .into(mImgProfile);
                         }
                         else{
