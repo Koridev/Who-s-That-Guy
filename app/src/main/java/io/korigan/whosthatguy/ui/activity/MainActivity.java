@@ -2,23 +2,29 @@ package io.korigan.whosthatguy.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +43,7 @@ import io.korigan.whosthatguy.model.MDBMovie;
 import io.korigan.whosthatguy.network.MovieDBService;
 import io.korigan.whosthatguy.ui.adapter.ActorAdapter;
 import io.korigan.whosthatguy.ui.adapter.MovieAdapter;
+import io.korigan.whosthatguy.ui.animation.VisibilityAnimator;
 import io.korigan.whosthatguy.ui.decorator.DividerItemDecoration;
 import io.korigan.whosthatguy.util.OnMovieClickListener;
 import retrofit.Callback;
@@ -216,7 +223,6 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         });
 
         mMediaSearches = new ArrayList<>();
-
     }
 
     @Override
@@ -248,15 +254,9 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
             mSelectedMovie = Parcels.unwrap(pMovie);
         }
         if(mMovieIsLocked && mSelectedMovie != null){
-            lockMovie(mSelectedMovie);
+            lockMovie(mSelectedMovie, false);
         }
         Parcelable pMovieSearch = b.getParcelable(LAST_MOVIE_SEARCH);
-//        if(pMovieSearch != null){
-//            mMovieSearch = Parcels.unwrap(pMovieSearch);
-//            if(mMoviePanelIsShown){
-//                setMediaSearch(mMovieSearch);
-//            }
-//        }
         if(pMovieSearch != null){
             mMediaSearches = Parcels.unwrap(pMovieSearch);
             if(mMoviePanelIsShown && !mMediaSearches.isEmpty()){
@@ -412,7 +412,7 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         mMoviePanelIsShown = false;
 
         if(mSelectedMovie != null) {
-            lockMovie(mSelectedMovie);
+            lockMovie(mSelectedMovie, true);
         }
     }
 
@@ -422,25 +422,64 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         mMovieSearchContainer.setVisibility(View.INVISIBLE);
         mMovieAdapter.clear();
         mMovieAdapter.notifyDataSetChanged();
-//        mMovieSearch = null;
         mMediaSearches.clear();
     }
 
-    private void lockMovie(MDBMovie movie){
+    private KeyListener mETKeyListener;
+    private void lockMovie(MDBMovie movie, boolean animate){
         mETSearch.setText(movie.getTitle());
+        mETSearch.setEllipsize(TextUtils.TruncateAt.END);
         mETSearch.setEnabled(false);
-        mICEdit.setVisibility(View.VISIBLE);
-        mICSearch.setVisibility(View.INVISIBLE);
+        mETKeyListener = mETSearch.getKeyListener();
+        mETSearch.setKeyListener(null);
+        if(animate) {
+            VisibilityAnimator.fadeOut(mICSearch,
+                    View.GONE, new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            VisibilityAnimator.fadeIn(mICEdit);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
+            //animate mETSearch background color
+            ((TransitionDrawable)mETSearch.getBackground()).startTransition(200);
+        }
+        else{
+            mICSearch.setVisibility(View.GONE);
+            mICEdit.setVisibility(View.VISIBLE);
+        }
         mMovieIsLocked = true;
     }
 
 
     private void unlockMovie(){
         mETSearch.setEnabled(true);
+        mETSearch.setKeyListener(mETKeyListener);
         mETSearch.getEditableText().clear();
-        mICEdit.setVisibility(View.GONE);
-        mICSearch.setVisibility(View.VISIBLE);
 
+        VisibilityAnimator.fadeOut(mICEdit, View.GONE, new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                VisibilityAnimator.fadeIn(mICSearch);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        //animate mETSearch background color
+        ((TransitionDrawable)mETSearch.getBackground()).reverseTransition(200);
         mMovieIsLocked = false;
     }
 

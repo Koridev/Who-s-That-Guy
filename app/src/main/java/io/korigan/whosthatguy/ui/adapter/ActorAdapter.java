@@ -97,11 +97,17 @@ public class ActorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public void bindData(MDBCast castMember){
             ((TextView)mItemView.findViewById(R.id.tv_name)).setText(castMember.name);
             ((TextView)mItemView.findViewById(R.id.tv_character)).setText(castMember.character);
-            Picasso.with(mContext)
-                    .load(mContext.getString(R.string.endpoint_tmdb_img)+"/w300"+castMember.profile_path)
-                    .centerCrop()
-                    .fit()
-                    .into(mImgProfile);
+            if(castMember.profile_path != null && !castMember.profile_path.isEmpty()) {
+                Picasso.with(mContext)
+                        .load(mContext.getString(R.string.endpoint_tmdb_img) + "/w300" + castMember.profile_path)
+                        .centerCrop()
+                        .fit()
+                        .error(R.drawable.ic_person)
+                        .into(mImgProfile);
+            }
+            else{
+                mImgProfile.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_person));
+            }
 
         }
 

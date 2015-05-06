@@ -3,9 +3,11 @@
     <color name="primary">#4DB6AC</color>
     <color name="accent">#80CBC4</color>
     <color name="primary_dark">#26A69A</color>
+    <color name="primary_light">#80CBC4</color>
     <color name="grey_border">#c7c7c7</color>
     <color name="background">#e8e8e8</color>
     <color name="background_accent">#c7c7c7</color>
     <color name="white_accent">#e8e8e8</color>
     <color name="text_normal">#3D3D3D</color>
+    <color name="text_hint">#AAFFFFFF</color>
 </resources>

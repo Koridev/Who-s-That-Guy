@@ -74,11 +74,17 @@ public class ActorDetailActivity extends ActionBarActivity {
                             mProgressBar.setVisibility(View.INVISIBLE);
                         }
 
-                        Picasso.with(ActorDetailActivity.this)
-                                .load(getString(R.string.endpoint_tmdb_img)+"/w300"+mdbPerson.profile_path)
-                                .centerCrop()
-                                .fit()
-                                .into(mImgProfile);
+                        if(mdbPerson.profile_path != null && !mdbPerson.profile_path.isEmpty()) {
+                            Picasso.with(ActorDetailActivity.this)
+                                    .load(getString(R.string.endpoint_tmdb_img)+"/w300"+mdbPerson.profile_path)
+                                    .centerCrop()
+                                    .fit()
+                                    .error(R.drawable.ic_person_big)
+                                    .into(mImgProfile);
+                        }
+                        else{
+                            mImgProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_person_big));
+                        }
                     }
 
                     @Override
