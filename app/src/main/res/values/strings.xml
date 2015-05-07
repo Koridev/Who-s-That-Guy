@@ -11,8 +11,9 @@
     <string name="no_movie">"Oops, no movie found by that title"</string>
     <string name="movie_count_start">"Results: "</string>
     <string name="movie_count_end">" matches"</string>
+    <string name="biography">Biography</string>
     <string name="themoviedborg">"http://themoviedb.org"</string>
-
+    <string name="as">"As "</string>
     <string name="app_version">"v0.1"</string>
     <string name="dev_mail">"guillaumeb90@gmail.com"</string>
     <string name="ask_report">Thank you for reporting any bug or suggestion!</string>

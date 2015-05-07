@@ -2,7 +2,6 @@ package io.korigan.whosthatguy.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -24,17 +23,14 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 import org.parceler.Parcels;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import io.korigan.whosthatguy.R;
 import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBCredits;
@@ -442,18 +438,20 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             VisibilityAnimator.fadeIn(mICEdit);
+                            //animate mETSearch background color
+                            ((TransitionDrawable)mETSearch.getBackground()).startTransition(200);
                         }
 
                         @Override
                         public void onAnimationRepeat(Animation animation) {
                         }
                     });
-            //animate mETSearch background color
-            ((TransitionDrawable)mETSearch.getBackground()).startTransition(200);
+
         }
         else{
             mICSearch.setVisibility(View.GONE);
             mICEdit.setVisibility(View.VISIBLE);
+            ((TransitionDrawable)mETSearch.getBackground()).startTransition(0);
         }
         mMovieIsLocked = true;
     }
@@ -524,6 +522,5 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
             super.onBackPressed();
         }
     }
-
 
 }

@@ -16,6 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            app:titleTextAppearance="@style/WTG.Toolbar.Title"
             app:popupTheme="@style/WTG.PopupTheme"/>
 
         <RelativeLayout

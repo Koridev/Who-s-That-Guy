@@ -1,5 +1,11 @@
 package io.korigan.whosthatguy.model;
 
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 /**
  * Created by guillaume on 29/04/15.
  */
@@ -35,14 +41,40 @@ public class MDBActorCreditsList {
         return cast.length;
     }
 
+    public List<MDBActorCredit> getAppearances(){
+        return Arrays.asList(cast);
+    }
+
     public static class MDBActorCredit{
         private String character;
         private String original_title;
         private String original_name;
         private String media_type;
+        public Date release_date;
+        public String poster_path;
+
 
         public String getTitle(){
             return MDBUtils.getTitle(original_title, original_name, media_type);
+        }
+
+        public String getCharacter(){
+            return character;
+        }
+
+        public String getReleaseYear(){
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(release_date);
+            return String.valueOf(cal.get(Calendar.YEAR));
+        }
+
+        public String getTitleWithYear(){
+            if(release_date != null) {
+                return getTitle() + " (" + getReleaseYear() + ")";
+            }
+            else{
+                return getTitle();
+            }
         }
     }
 }

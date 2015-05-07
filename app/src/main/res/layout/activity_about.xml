@@ -11,6 +11,7 @@
         app:theme="@style/WTG.ActionBar"
         android:background="@color/primary"
         android:id="@+id/toolbar"
+        app:titleTextAppearance="@style/WTG.Toolbar.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

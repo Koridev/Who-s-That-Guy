@@ -2,10 +2,13 @@ package io.korigan.whosthatguy.ui.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,6 +21,8 @@ import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBActorCreditsList;
 import io.korigan.whosthatguy.network.MovieDBService;
 import io.korigan.whosthatguy.model.MDBPerson;
+import io.korigan.whosthatguy.ui.adapter.AppearanceAdapter;
+import io.korigan.whosthatguy.ui.decorator.DividerItemDecoration;
 import io.korigan.whosthatguy.ui.transformation.CircleTransformation;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -33,9 +38,10 @@ public class ActorDetailActivity extends ActionBarActivity {
     private MovieDBService mTMDBService;
 
     private ProgressBar mProgressBar;
-    private TextView mTVAppearances;
-    private TextView mTVBiography;
-    private ImageView mImgProfile;
+//    private TextView mTVAppearances;
+
+    private RecyclerView mAppearancesList;
+    private AppearanceAdapter mAppearanceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +52,14 @@ public class ActorDetailActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-        mTVAppearances = (TextView) findViewById(R.id.tv_appearances);
-        mImgProfile = (ImageView) findViewById(R.id.img_profile);
-        mTVBiography = (TextView) findViewById(R.id.tv_biography);
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mAppearancesList = (RecyclerView) findViewById(R.id.list_appearances);
+
+        mAppearancesList.setLayoutManager(new LinearLayoutManager(this));
+        mAppearanceAdapter = new AppearanceAdapter(this, (ViewGroup)findViewById(R.id.list_parent));
+        mAppearancesList.addItemDecoration(new DividerItemDecoration(this));
+        mAppearancesList.setAdapter(mAppearanceAdapter);
 
         String actorId = getIntent().getStringExtra(ACTOR_ID);
 
@@ -67,25 +76,11 @@ public class ActorDetailActivity extends ActionBarActivity {
                     @Override
                     public void success(MDBPerson mdbPerson, Response response) {
                         getSupportActionBar().setTitle(mdbPerson.name);
-                        if(mdbPerson.biography != null && !mdbPerson.biography.isEmpty()){
-                            (findViewById(R.id.tv_label_biography))
-                                    .setVisibility(View.VISIBLE);
-                            mTVBiography.setText(mdbPerson.biography);
-                            mTVBiography.setVisibility(View.VISIBLE);
-                            mProgressBar.setVisibility(View.INVISIBLE);
-                        }
+                        mAppearanceAdapter.setPersonInfo(mdbPerson);
 
-                        if(mdbPerson.profile_path != null && !mdbPerson.profile_path.isEmpty()) {
-                            Picasso.with(ActorDetailActivity.this)
-                                    .load(getString(R.string.endpoint_tmdb_img)+"/w300"+mdbPerson.profile_path)
-                                    .centerCrop()
-                                    .fit()
-                                    .error(R.drawable.ic_person_big)
-                                    .transform(new CircleTransformation())
-                                    .into(mImgProfile);
-                        }
-                        else{
-                            mImgProfile.setImageDrawable(getResources().getDrawable(R.drawable.ic_person_big));
+                        if(mdbPerson.biography != null && !mdbPerson.biography.isEmpty()) {
+                            mProgressBar.setVisibility(View.INVISIBLE);
+
                         }
                     }
 
@@ -101,10 +96,11 @@ public class ActorDetailActivity extends ActionBarActivity {
                     @Override
                     public void success(MDBActorCreditsList mdbActorCreditsList, Response response) {
                         if(mdbActorCreditsList.getAppearanceCount() > 0){
-                            (findViewById(R.id.tv_label_appearances))
-                                    .setVisibility(View.VISIBLE);
-                            mTVAppearances.setText(mdbActorCreditsList.getFormattedAppearance());
-                            mTVAppearances.setVisibility(View.VISIBLE);
+//                            (findViewById(R.id.tv_label_appearances))
+//                                    .setVisibility(View.VISIBLE);
+
+                            mAppearanceAdapter.setAppearanceList(mdbActorCreditsList.getAppearances());
+                            mAppearanceAdapter.notifyDataSetChanged();
                         }
 
                         mProgressBar.setVisibility(View.INVISIBLE);
