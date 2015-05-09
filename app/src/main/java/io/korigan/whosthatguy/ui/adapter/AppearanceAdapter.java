@@ -155,13 +155,13 @@ public class AppearanceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         .load(mContext.getString(R.string.endpoint_tmdb_img) + "/w300" + appearance.poster_path)
                         .centerCrop()
                         .fit()
-                        .error(R.drawable.ic_no_poster)
+                        .error(R.drawable.ic_movie)
                         .into((ImageView) mItemView.findViewById(R.id.img_poster));
 
             }
             else{
 
-                ((ImageView) mItemView.findViewById(R.id.img_poster)).setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_no_poster));
+                ((ImageView) mItemView.findViewById(R.id.img_poster)).setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_movie));
             }
         }
 

@@ -144,11 +144,11 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         .load(mContext.getString(R.string.endpoint_tmdb_img) + "/w300" + m.getPosterPath())
                         .centerCrop()
                         .fit()
-                        .error(R.drawable.ic_no_poster)
+                        .error(R.drawable.ic_movie)
                         .into(mImgProfile);
             }
             else{
-                mImgProfile.setImageResource(R.drawable.ic_no_poster);
+                mImgProfile.setImageResource(R.drawable.ic_movie);
             }
         }
 
