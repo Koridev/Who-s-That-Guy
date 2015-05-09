@@ -3,8 +3,6 @@
 
     <item android:state_pressed="true">
         <inset xmlns:android="http://schemas.android.com/apk/res/android"
-            android:insetBottom="15dp"
-            android:insetLeft="15dp"
             android:visible="true" >
             <shape android:shape="rectangle">
                 <solid android:color="?attr/colorControlHighlight"/>

@@ -139,11 +139,17 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mImgProfile.setVisibility(View.VISIBLE);
             ((TextView)mItemView.findViewById(R.id.tv_title)).setText(m.getTitle());
             ((TextView)mItemView.findViewById(R.id.tv_info)).setText(m.getReleaseDate());
-            Picasso.with(mContext)
-                    .load(mContext.getString(R.string.endpoint_tmdb_img)+"/w300"+m.getPosterPath())
-                    .centerCrop()
-                    .fit()
-                    .into(mImgProfile);
+            if(m.getPosterPath() != null && !m.getPosterPath().isEmpty()) {
+                Picasso.with(mContext)
+                        .load(mContext.getString(R.string.endpoint_tmdb_img) + "/w300" + m.getPosterPath())
+                        .centerCrop()
+                        .fit()
+                        .error(R.drawable.ic_no_poster)
+                        .into(mImgProfile);
+            }
+            else{
+                mImgProfile.setImageResource(R.drawable.ic_no_poster);
+            }
         }
 
         public void setLoading(){

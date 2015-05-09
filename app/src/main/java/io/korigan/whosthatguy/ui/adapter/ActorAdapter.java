@@ -3,6 +3,8 @@ package io.korigan.whosthatguy.ui.adapter;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
@@ -108,7 +110,13 @@ public class ActorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         .into(mImgProfile);
             }
             else{
-                mImgProfile.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_person));
+                CircleTransformation ct = new CircleTransformation();
+
+                mImgProfile.setImageBitmap(
+                    ct.transform(
+                        BitmapFactory.decodeResource(
+                            mContext.getResources(),
+                            R.drawable.ic_person)));
             }
 
         }
