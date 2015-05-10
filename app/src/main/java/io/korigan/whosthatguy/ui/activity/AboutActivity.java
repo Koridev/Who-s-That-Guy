@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import io.korigan.whosthatguy.R;
+import io.korigan.whosthatguy.WhosThatGuyApp;
 
 public class AboutActivity extends ActionBarActivity {
 
@@ -38,7 +39,11 @@ public class AboutActivity extends ActionBarActivity {
 
     }
 
-
+    @Override
+    protected void onStart(){
+        super.onStart();
+        WhosThatGuyApp.get().sendScreenView("view.about");
+    }
 
 
     @Override

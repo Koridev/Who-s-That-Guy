@@ -128,7 +128,8 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
 
         mActorListView.setLayoutManager(new LinearLayoutManager(this));
         mActorAdapter = new ActorAdapter(this);
-        mActorListView.addItemDecoration(new DividerItemDecoration(this));
+        mActorListView.addItemDecoration(new DividerItemDecoration(this,
+                getResources().getColor(R.color.background)));
         mActorListView.setAdapter(mActorAdapter);
 
         mMovieListView.setLayoutManager(new LinearLayoutManager(this));
@@ -156,6 +157,10 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 mCurrentQuery = v.getText().toString();
+                WhosThatGuyApp.get().sendTrackingEvent(
+                        getString(R.string.category_action),
+                        getString(R.string.action_movie_search),
+                        mCurrentQuery);
                 final String query = v.getText().toString();
                 mSearchEmptyView.setVisibility(View.INVISIBLE);
                 mPBMovies.setVisibility(View.VISIBLE);
@@ -181,7 +186,6 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
                                        @Override
                                         public void success(MDBMediaSearch mdbMediaSearch, Response response) {
                                             if(mCurrentQuery.equals(query)){
-                                                Log.d("MainActivity", "append media search");
                                                 mMediaSearches.add(mdbMediaSearch);
                                                 addMediaSearch(mdbMediaSearch);
 
@@ -219,6 +223,12 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         });
 
         mMediaSearches = new ArrayList<>();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        WhosThatGuyApp.get().sendScreenView("view.main");
     }
 
     @Override
@@ -275,6 +285,11 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
     @Override
     public void onMovieClick(MDBMovie movie) {
         closeKeyboard();
+
+        WhosThatGuyApp.get().sendTrackingEvent(
+                getString(R.string.category_action),
+                getString(R.string.action_movie_click),
+                movie.getTitle());
         mSelectedMovie = movie;
         hideMoviePanel();
         mEmptyView.setVisibility(View.INVISIBLE);

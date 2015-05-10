@@ -19,7 +19,7 @@ public class DividerItemDecoration  extends RecyclerView.ItemDecoration{
 
     private Context mContext;
 
-    private Paint mWhitePaint;
+    private Paint mBackgroundPaint;
     private Paint mDividerPaint;
 
     private static final int DIVIDER_SIDES_DP = 12;
@@ -27,17 +27,21 @@ public class DividerItemDecoration  extends RecyclerView.ItemDecoration{
     private float mDividerSideSpacePx;
 
     public DividerItemDecoration(Context context) {
+        this(context, Color.WHITE);
+    }
+
+    public DividerItemDecoration(Context context, int backgroundColor) {
         mContext = context;
 
         mDividerHeightPx = 1;
         mDividerSideSpacePx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DIVIDER_SIDES_DP, context.getResources().getDisplayMetrics());
 
-        mWhitePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mWhitePaint.setStyle(Paint.Style.FILL);
-        mWhitePaint.setColor(Color.WHITE);
+        mBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mBackgroundPaint.setStyle(Paint.Style.FILL);
+        mBackgroundPaint.setColor(backgroundColor);
 
-        mDividerPaint = new Paint(mWhitePaint);
+        mDividerPaint = new Paint(mBackgroundPaint);
         mDividerPaint.setColor(context.getResources().getColor(R.color.grey_border));
     }
 
@@ -58,7 +62,7 @@ public class DividerItemDecoration  extends RecyclerView.ItemDecoration{
             final int bottom = child.getTop()  + params.topMargin +
                     Math.round(ViewCompat.getTranslationY(child));
             final int top = (int)(bottom - mDividerHeightPx);
-            c.drawRect(left, top, right, bottom, mWhitePaint);
+            c.drawRect(left, top, right, bottom, mBackgroundPaint);
             c.drawRect(left, top, right, bottom, mDividerPaint);
         }
         if(numBorders > 1) {
@@ -71,7 +75,7 @@ public class DividerItemDecoration  extends RecyclerView.ItemDecoration{
                         Math.round(ViewCompat.getTranslationY(child));
                 final int bottom = (int) (top + mDividerHeightPx);
 
-                c.drawRect(left, top, right, bottom, mWhitePaint);
+                c.drawRect(left, top, right, bottom, mBackgroundPaint);
                 c.drawRect(left + mDividerSideSpacePx, top, right - mDividerSideSpacePx, bottom, mDividerPaint);
             }
         }
@@ -84,7 +88,7 @@ public class DividerItemDecoration  extends RecyclerView.ItemDecoration{
                     Math.round(ViewCompat.getTranslationY(child));
             final int bottom = (int) (top + mDividerHeightPx);
 
-            c.drawRect(left, top, right, bottom, mWhitePaint);
+            c.drawRect(left, top, right, bottom, mBackgroundPaint);
             c.drawRect(left, top, right, bottom, mDividerPaint);
         }
 

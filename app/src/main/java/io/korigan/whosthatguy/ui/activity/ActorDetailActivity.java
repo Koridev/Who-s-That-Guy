@@ -58,7 +58,8 @@ public class ActorDetailActivity extends ActionBarActivity {
 
         mAppearancesList.setLayoutManager(new LinearLayoutManager(this));
         mAppearanceAdapter = new AppearanceAdapter(this, (ViewGroup)findViewById(R.id.list_parent));
-        mAppearancesList.addItemDecoration(new DividerItemDecoration(this));
+        mAppearancesList.addItemDecoration(new DividerItemDecoration(this,
+                getResources().getColor(R.color.background)));
         mAppearancesList.setAdapter(mAppearanceAdapter);
 
         String actorId = getIntent().getStringExtra(ACTOR_ID);
@@ -96,8 +97,6 @@ public class ActorDetailActivity extends ActionBarActivity {
                     @Override
                     public void success(MDBActorCreditsList mdbActorCreditsList, Response response) {
                         if(mdbActorCreditsList.getAppearanceCount() > 0){
-//                            (findViewById(R.id.tv_label_appearances))
-//                                    .setVisibility(View.VISIBLE);
 
                             mAppearanceAdapter.setAppearanceList(mdbActorCreditsList.getAppearances());
                             mAppearanceAdapter.notifyDataSetChanged();
@@ -111,6 +110,12 @@ public class ActorDetailActivity extends ActionBarActivity {
                         Toast.makeText(ActorDetailActivity.this, "Oups...", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        WhosThatGuyApp.get().sendScreenView("view.actor_detail");
     }
 
 

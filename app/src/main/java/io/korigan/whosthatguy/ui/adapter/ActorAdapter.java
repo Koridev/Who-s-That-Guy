@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.korigan.whosthatguy.R;
+import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBCast;
 import io.korigan.whosthatguy.ui.activity.ActorDetailActivity;
 import io.korigan.whosthatguy.ui.transformation.CircleTransformation;
@@ -63,6 +64,11 @@ public class ActorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, ActorDetailActivity.class);
                 intent.putExtra(ActorDetailActivity.ACTOR_ID, mActorList.get(i).id);
+
+                WhosThatGuyApp.get().sendTrackingEvent(
+                        mContext.getString(R.string.category_action),
+                        mContext.getString(R.string.action_actor_click),
+                        mActorList.get(i).name);
 
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                    ActivityOptions options = ActivityOptions
