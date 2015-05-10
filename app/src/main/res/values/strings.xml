@@ -27,4 +27,8 @@
     <string name="error_network">"network"</string>
 
     <string name="network_error">Oups, an error occured while fetching data</string>
+    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

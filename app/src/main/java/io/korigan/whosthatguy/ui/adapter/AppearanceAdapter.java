@@ -1,6 +1,8 @@
 package io.korigan.whosthatguy.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +12,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import io.korigan.whosthatguy.R;
+import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBActorCreditsList;
 import io.korigan.whosthatguy.model.MDBPerson;
+import io.korigan.whosthatguy.ui.activity.ActorDetailActivity;
+import io.korigan.whosthatguy.ui.activity.MovieDetailActivity;
 import io.korigan.whosthatguy.ui.transformation.CircleTransformation;
 
 /**
@@ -45,6 +52,11 @@ public class AppearanceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void setAppearanceList(List<MDBActorCreditsList.MDBActorCredit> list){
         //TODO show label appearances
         mAppearancesList = (list);
+    }
+
+    public void clear(){
+        mAppearancesList.clear();
+        mPersonInfo = null;
     }
 
     @Override
@@ -80,7 +92,24 @@ public class AppearanceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if(mPersonInfo != null){
                 listPosition--;
             }
+            final int finalListPosition = listPosition;
             ((AppearanceHolder) holder).bindData(mAppearancesList.get(listPosition));
+            ((AppearanceHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, MovieDetailActivity.class);
+                    intent.putExtra(MovieDetailActivity.MEDIA_TYPE, mAppearancesList.get(finalListPosition).media_type);
+                    intent.putExtra(MovieDetailActivity.MOVIE_CREDIT, Parcels.wrap(MDBActorCreditsList.MDBActorCredit.class, mAppearancesList.get(finalListPosition)));
+
+                    WhosThatGuyApp.get().sendTrackingEvent(
+                            mContext.getString(R.string.category_action),
+                            mContext.getString(R.string.action_movie_click),
+                            mAppearancesList.get(finalListPosition).getTitle());
+
+                    mContext.startActivity(intent);
+                    ((ActionBarActivity)mContext).overridePendingTransition(R.transition.slide_right_in, R.transition.hold);
+                }
+            });
         }
     }
 

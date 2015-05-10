@@ -1,14 +1,18 @@
 package io.korigan.whosthatguy.model;
 
+import org.parceler.Parcel;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by guillaume on 29/04/15.
  */
+@Parcel
 public class MDBActorCreditsList {
 
     private static final int MAX_LENGTH = 6;
@@ -42,14 +46,16 @@ public class MDBActorCreditsList {
     }
 
     public List<MDBActorCredit> getAppearances(){
-        return Arrays.asList(cast);
+        return new LinkedList<MDBActorCredit>(Arrays.asList(cast));
     }
 
+    @Parcel
     public static class MDBActorCredit{
+        public String id;
         private String character;
         private String original_title;
         private String original_name;
-        private String media_type;
+        public String media_type;
         public Date release_date;
         public String poster_path;
 

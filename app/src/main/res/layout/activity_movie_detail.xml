@@ -1,0 +1,50 @@
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        app:theme="@style/WTG.ActionBar"
+        android:background="@color/primary"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:titleTextAppearance="@style/WTG.Toolbar.Title"
+        app:popupTheme="@style/WTG.PopupTheme"/>
+
+
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="io.korigan.whosthatguy.ui.activity.MovieDetailActivity">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+
+        <include
+            android:id="@+id/view_no_actor"
+            layout="@layout/view_no_actor"
+            android:visibility="invisible"/>
+
+        <include
+            android:id="@+id/empty_container"
+            layout="@layout/view_empty_actor"
+            android:visibility="invisible"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_actors"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+</LinearLayout>

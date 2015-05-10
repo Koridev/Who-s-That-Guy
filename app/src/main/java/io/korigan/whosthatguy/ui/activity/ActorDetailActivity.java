@@ -1,5 +1,6 @@
 package io.korigan.whosthatguy.ui.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,9 @@ public class ActorDetailActivity extends ActionBarActivity {
     private RecyclerView mAppearancesList;
     private AppearanceAdapter mAppearanceAdapter;
 
+    private MDBPerson mPerson;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,11 +75,36 @@ public class ActorDetailActivity extends ActionBarActivity {
 
         mTMDBService = restAdapter.create(MovieDBService.class);
 
+        getActorData(actorId);
+    }
+
+    @Override
+    public void onNewIntent(Intent i){
+        super.onNewIntent(i);
+        setIntent(i);
+        String actorId = i.getStringExtra(ACTOR_ID);
+        if(mPerson != null) {
+            resetView();
+            mProgressBar.setVisibility(View.VISIBLE);
+            if (!actorId.equals(mPerson.id)) {
+                getActorData(actorId);
+            }
+        }
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        WhosThatGuyApp.get().sendScreenView("view.actor_detail");
+    }
+
+    private void getActorData(final String actorId){
         mTMDBService.getPerson(getString(R.string.apikey), actorId,
                 new Callback<MDBPerson>() {
 
                     @Override
                     public void success(MDBPerson mdbPerson, Response response) {
+                        mPerson = mdbPerson;
                         getSupportActionBar().setTitle(mdbPerson.name);
                         mAppearanceAdapter.setPersonInfo(mdbPerson);
 
@@ -91,7 +120,7 @@ public class ActorDetailActivity extends ActionBarActivity {
                         WhosThatGuyApp.get().sendTrackingEvent(
                                 getString(R.string.category_error),
                                 getString(R.string.error_network),
-                                error.getMessage()+" (while fetching person)");
+                                error.getMessage() + " (while fetching person)");
                     }
                 });
 
@@ -120,10 +149,11 @@ public class ActorDetailActivity extends ActionBarActivity {
                 });
     }
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-        WhosThatGuyApp.get().sendScreenView("view.actor_detail");
+    private void resetView(){
+        getSupportActionBar().setTitle("");
+        mAppearanceAdapter.clear();
+        mAppearanceAdapter.notifyDataSetChanged();
+
     }
 
 

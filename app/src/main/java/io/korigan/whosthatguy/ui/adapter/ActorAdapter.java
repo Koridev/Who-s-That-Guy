@@ -23,6 +23,7 @@ import io.korigan.whosthatguy.R;
 import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBCast;
 import io.korigan.whosthatguy.ui.activity.ActorDetailActivity;
+import io.korigan.whosthatguy.ui.activity.MovieDetailActivity;
 import io.korigan.whosthatguy.ui.transformation.CircleTransformation;
 
 
@@ -64,7 +65,7 @@ public class ActorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, ActorDetailActivity.class);
                 intent.putExtra(ActorDetailActivity.ACTOR_ID, mActorList.get(i).id);
-
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 WhosThatGuyApp.get().sendTrackingEvent(
                         mContext.getString(R.string.category_action),
                         mContext.getString(R.string.action_actor_click),
@@ -79,7 +80,15 @@ public class ActorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 //                }
 //                else{
                 mContext.startActivity(intent);
-                ((ActionBarActivity)mContext).overridePendingTransition(R.transition.slide_right_in, R.transition.hold);
+                if(mContext instanceof MovieDetailActivity){
+//                    ((MovieDetailActivity) mContext).finish();
+                    ((MovieDetailActivity) mContext)
+                            .overridePendingTransition(R.transition.hold, R.transition.slide_right_out);
+                }
+                else {
+                    ((ActionBarActivity) mContext)
+                            .overridePendingTransition(R.transition.slide_right_in, R.transition.hold);
+                }
 //                }
             }
         });
