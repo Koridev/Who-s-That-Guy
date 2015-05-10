@@ -18,8 +18,13 @@
     <string name="dev_mail">"guillaumeb90@gmail.com"</string>
     <string name="ask_report">Thank you for reporting any bug or suggestion!</string>
 
+    <!--Google analytics-->
     <string name="category_action">"action"</string>
+    <string name="category_error">"error"</string>
     <string name="action_movie_search">"movie_search"</string>
     <string name="action_movie_click">"movie_click"</string>
     <string name="action_actor_click">"movie_click"</string>
+    <string name="error_network">"network"</string>
+
+    <string name="network_error">Oups, an error occured while fetching data</string>
 </resources>

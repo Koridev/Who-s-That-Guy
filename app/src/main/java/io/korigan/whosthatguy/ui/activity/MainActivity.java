@@ -204,7 +204,11 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
 
                                         @Override
                                         public void failure(RetrofitError error) {
-                                            Toast.makeText(MainActivity.this, "Oups...", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(MainActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                                            WhosThatGuyApp.get().sendTrackingEvent(
+                                                    getString(R.string.category_error),
+                                                    getString(R.string.error_network),
+                                                    error.getMessage()+" (while fetching media by page)");
                                         }
 
                                     });
@@ -213,7 +217,11 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(MainActivity.this, "Oups...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                        WhosThatGuyApp.get().sendTrackingEvent(
+                                getString(R.string.category_error),
+                                getString(R.string.error_network),
+                                error.getMessage()+" (while fetching media)");
                         mPBMovies.setVisibility(View.INVISIBLE);
                         mSearchEmptyView.setVisibility(View.VISIBLE);
                     }
@@ -308,7 +316,11 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(MainActivity.this, "Oups...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                        WhosThatGuyApp.get().sendTrackingEvent(
+                                getString(R.string.category_error),
+                                getString(R.string.error_network),
+                                error.getMessage()+" (while fetching movieCredits)");
                         mProgressBar.setVisibility(View.INVISIBLE);
                         mEmptyView.setVisibility(View.VISIBLE);
                     }

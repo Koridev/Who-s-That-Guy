@@ -87,7 +87,11 @@ public class ActorDetailActivity extends ActionBarActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(ActorDetailActivity.this, "Oups...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActorDetailActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                        WhosThatGuyApp.get().sendTrackingEvent(
+                                getString(R.string.category_error),
+                                getString(R.string.error_network),
+                                error.getMessage()+" (while fetching person)");
                     }
                 });
 
@@ -107,7 +111,11 @@ public class ActorDetailActivity extends ActionBarActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(ActorDetailActivity.this, "Oups...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActorDetailActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                        WhosThatGuyApp.get().sendTrackingEvent(
+                                getString(R.string.category_error),
+                                getString(R.string.error_network),
+                                error.getMessage()+" (while fetching credits)");
                     }
                 });
     }
