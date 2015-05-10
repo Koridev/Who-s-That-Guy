@@ -17,6 +17,15 @@
     <string name="app_version">"v0.1"</string>
     <string name="dev_mail">"guillaumeb90@gmail.com"</string>
     <string name="ask_report">Thank you for reporting any bug or suggestion!</string>
+    <string name="close">"Close"</string>
+
+    <!-- Network error-->
+    <string name="error_network_title">"Network error"</string>
+    <string name="error_network_message">"Oups, it seems you don't have access to the web"</string>
+    <string name="error_conversion_title">"Conversion error"</string>
+    <string name="error_conversion_message">"Oups, An error occured while reading data from the server. Sorry, we'll fix that soon!"</string>
+    <string name="error_http_title">"Server error"</string>
+
 
     <!--Google analytics-->
     <string name="category_action">"action"</string>

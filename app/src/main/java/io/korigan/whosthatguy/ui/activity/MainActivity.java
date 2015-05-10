@@ -9,6 +9,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -36,20 +37,20 @@ import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBCredits;
 import io.korigan.whosthatguy.model.MDBMediaSearch;
 import io.korigan.whosthatguy.model.MDBMovie;
+import io.korigan.whosthatguy.network.GenericCallback;
 import io.korigan.whosthatguy.network.MovieDBService;
 import io.korigan.whosthatguy.ui.adapter.ActorAdapter;
 import io.korigan.whosthatguy.ui.adapter.MovieAdapter;
 import io.korigan.whosthatguy.ui.animation.VisibilityAnimator;
 import io.korigan.whosthatguy.ui.decorator.DividerItemDecoration;
 import io.korigan.whosthatguy.util.OnMovieClickListener;
-import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 
 
-public class MainActivity extends ActionBarActivity implements OnMovieClickListener {
+public class MainActivity extends AppCompatActivity implements OnMovieClickListener {
 
     private static final String PANEL_IS_OPEN = "PanelIsOpenend";
     private static final String MOVIE_TITLE = "MovieTitle";
@@ -168,7 +169,7 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
                 closeKeyboard();
                 mMediaSearches.clear();
                 mTMDBService.mediaSearch(getString(R.string.apikey), query,
-                        new Callback<MDBMediaSearch>() {
+                        new GenericCallback<MDBMediaSearch>(MainActivity.this) {
 
                     @Override
                     public void success(MDBMediaSearch movieSearch, Response response) {
@@ -180,7 +181,7 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
                             mTMDBService.mediaSearchByPage(getString(R.string.apikey),
                                     query,
                                     2,
-                                    new Callback<MDBMediaSearch>(){
+                                    new GenericCallback<MDBMediaSearch>(MainActivity.this){
 
                                         private int mPage = 2;
                                        @Override
@@ -204,11 +205,11 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
 
                                         @Override
                                         public void failure(RetrofitError error) {
-                                            Toast.makeText(MainActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                                             WhosThatGuyApp.get().sendTrackingEvent(
                                                     getString(R.string.category_error),
                                                     getString(R.string.error_network),
                                                     error.getMessage()+" (while fetching media by page)");
+                                            super.failure(error);
                                         }
 
                                     });
@@ -217,13 +218,13 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(MainActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                         WhosThatGuyApp.get().sendTrackingEvent(
                                 getString(R.string.category_error),
                                 getString(R.string.error_network),
                                 error.getMessage()+" (while fetching media)");
                         mPBMovies.setVisibility(View.INVISIBLE);
                         mSearchEmptyView.setVisibility(View.VISIBLE);
+                        super.failure(error);
                     }
                 });
                 return true;
@@ -307,7 +308,7 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
         mTMDBService.movieCredits(getString(R.string.apikey),
                 movie.getMediaType(),
                 movie.id,
-                new Callback<MDBCredits>(){
+                new GenericCallback<MDBCredits>(MainActivity.this){
 
                     @Override
                     public void success(MDBCredits mdbCredits, Response response) {
@@ -316,13 +317,13 @@ public class MainActivity extends ActionBarActivity implements OnMovieClickListe
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(MainActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                         WhosThatGuyApp.get().sendTrackingEvent(
                                 getString(R.string.category_error),
                                 getString(R.string.error_network),
                                 error.getMessage()+" (while fetching movieCredits)");
                         mProgressBar.setVisibility(View.INVISIBLE);
                         mEmptyView.setVisibility(View.VISIBLE);
+                        super.failure(error);
                     }
                 });
     }

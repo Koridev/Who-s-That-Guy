@@ -2,6 +2,7 @@ package io.korigan.whosthatguy.ui.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import io.korigan.whosthatguy.R;
 import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBActorCreditsList;
 import io.korigan.whosthatguy.model.MDBCredits;
+import io.korigan.whosthatguy.network.GenericCallback;
 import io.korigan.whosthatguy.network.MovieDBService;
 import io.korigan.whosthatguy.ui.adapter.ActorAdapter;
 import io.korigan.whosthatguy.ui.decorator.DividerItemDecoration;
@@ -27,7 +29,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 
-public class MovieDetailActivity extends ActionBarActivity {
+public class MovieDetailActivity extends AppCompatActivity {
 
 //    public static final String MOVIE_ID = "MOVIE_ID";
     public static final String MEDIA_TYPE = "MEDIA_TYPE";
@@ -82,7 +84,7 @@ public class MovieDetailActivity extends ActionBarActivity {
         mProgressBar.setVisibility(View.VISIBLE);
         mTMDBService.movieCredits(getString(R.string.apikey),
                 mediaType, movieID,
-                new Callback<MDBCredits>(){
+                new GenericCallback<MDBCredits>(MovieDetailActivity.this){
 
                     @Override
                     public void success(MDBCredits mdbCredits, Response response) {
@@ -91,13 +93,13 @@ public class MovieDetailActivity extends ActionBarActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(MovieDetailActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                         WhosThatGuyApp.get().sendTrackingEvent(
                                 getString(R.string.category_error),
                                 getString(R.string.error_network),
                                 error.getMessage()+" (while fetching movieCredits)");
                         mProgressBar.setVisibility(View.INVISIBLE);
                         mNoActorView.setVisibility(View.VISIBLE); //TODO not this view
+                        super.failure(error);
                     }
                 });
 

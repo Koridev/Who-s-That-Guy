@@ -1,8 +1,8 @@
 package io.korigan.whosthatguy.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,18 +20,17 @@ import com.squareup.picasso.Picasso;
 import io.korigan.whosthatguy.R;
 import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBActorCreditsList;
+import io.korigan.whosthatguy.network.GenericCallback;
 import io.korigan.whosthatguy.network.MovieDBService;
 import io.korigan.whosthatguy.model.MDBPerson;
 import io.korigan.whosthatguy.ui.adapter.AppearanceAdapter;
 import io.korigan.whosthatguy.ui.decorator.DividerItemDecoration;
-import io.korigan.whosthatguy.ui.transformation.CircleTransformation;
-import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 
-public class ActorDetailActivity extends ActionBarActivity {
+public class ActorDetailActivity extends AppCompatActivity {
 
     public static final String ACTOR_ID = "ACTOR_ID";
     private static final String TAG = "ActorDetailActivity";
@@ -100,7 +99,7 @@ public class ActorDetailActivity extends ActionBarActivity {
 
     private void getActorData(final String actorId){
         mTMDBService.getPerson(getString(R.string.apikey), actorId,
-                new Callback<MDBPerson>() {
+                new GenericCallback<MDBPerson>(ActorDetailActivity.this) {
 
                     @Override
                     public void success(MDBPerson mdbPerson, Response response) {
@@ -116,16 +115,16 @@ public class ActorDetailActivity extends ActionBarActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(ActorDetailActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                         WhosThatGuyApp.get().sendTrackingEvent(
                                 getString(R.string.category_error),
                                 getString(R.string.error_network),
                                 error.getMessage() + " (while fetching person)");
+                        super.failure(error);
                     }
                 });
 
         mTMDBService.getCredits(getString(R.string.apikey), actorId,
-                new Callback<MDBActorCreditsList>(){
+                new GenericCallback<MDBActorCreditsList>(ActorDetailActivity.this){
 
                     @Override
                     public void success(MDBActorCreditsList mdbActorCreditsList, Response response) {
@@ -140,11 +139,11 @@ public class ActorDetailActivity extends ActionBarActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Toast.makeText(ActorDetailActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                         WhosThatGuyApp.get().sendTrackingEvent(
                                 getString(R.string.category_error),
                                 getString(R.string.error_network),
                                 error.getMessage()+" (while fetching credits)");
+                        super.failure(error);
                     }
                 });
     }

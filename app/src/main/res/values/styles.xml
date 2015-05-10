@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="WhosThatGuyTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
 
         <item name="colorPrimary">@color/primary</item>
         <item name="colorAccent">@color/accent</item>
@@ -17,7 +18,7 @@
 
     </style>
 
-    <style name="WTG.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+    <style name="WTG.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="elevation">2dp</item>
