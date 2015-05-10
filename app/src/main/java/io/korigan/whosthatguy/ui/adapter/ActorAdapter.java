@@ -1,12 +1,9 @@
 package io.korigan.whosthatguy.ui.adapter;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +70,7 @@ public class ActorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                    ActivityOptions options = ActivityOptions
-//                            .makeSceneTransitionAnimation((ActionBarActivity) mContext,
+//                            .makeSceneTransitionAnimation((AppCompatActivity) mContext,
 //                                    ((ActorHolder) viewHolder).getImageView(),
 //                                    "profile_pic");
 //                    mContext.startActivity(intent, options.toBundle());
@@ -86,7 +83,7 @@ public class ActorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             .overridePendingTransition(R.transition.hold, R.transition.slide_right_out);
                 }
                 else {
-                    ((ActionBarActivity) mContext)
+                    ((AppCompatActivity) mContext)
                             .overridePendingTransition(R.transition.slide_right_in, R.transition.hold);
                 }
 //                }

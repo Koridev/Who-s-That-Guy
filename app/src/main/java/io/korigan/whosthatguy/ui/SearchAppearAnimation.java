@@ -2,7 +2,7 @@ package io.korigan.whosthatguy.ui;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
@@ -14,7 +14,7 @@ import android.view.animation.TranslateAnimation;
  */
 public class SearchAppearAnimation extends AnimationSet {
 
-    public SearchAppearAnimation(ActionBarActivity context) {
+    public SearchAppearAnimation(AppCompatActivity context) {
         super(true);
 
         setFillAfter(true);

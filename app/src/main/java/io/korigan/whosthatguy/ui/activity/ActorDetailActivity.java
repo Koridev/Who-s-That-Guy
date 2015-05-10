@@ -106,6 +106,7 @@ public class ActorDetailActivity extends AppCompatActivity {
                         mPerson = mdbPerson;
                         getSupportActionBar().setTitle(mdbPerson.name);
                         mAppearanceAdapter.setPersonInfo(mdbPerson);
+                        mAppearancesList.getLayoutManager().scrollToPosition(0);
 
                         if(mdbPerson.biography != null && !mdbPerson.biography.isEmpty()) {
                             mProgressBar.setVisibility(View.INVISIBLE);

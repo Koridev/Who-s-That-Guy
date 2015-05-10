@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Parcelable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;

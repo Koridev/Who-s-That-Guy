@@ -1,6 +1,5 @@
 package io.korigan.whosthatguy.ui.activity;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,12 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import org.parceler.Parcels;
-
 import java.util.Arrays;
-
 import io.korigan.whosthatguy.R;
 import io.korigan.whosthatguy.WhosThatGuyApp;
 import io.korigan.whosthatguy.model.MDBActorCreditsList;
@@ -23,7 +18,6 @@ import io.korigan.whosthatguy.network.GenericCallback;
 import io.korigan.whosthatguy.network.MovieDBService;
 import io.korigan.whosthatguy.ui.adapter.ActorAdapter;
 import io.korigan.whosthatguy.ui.decorator.DividerItemDecoration;
-import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
