@@ -36,7 +36,6 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     @Override
