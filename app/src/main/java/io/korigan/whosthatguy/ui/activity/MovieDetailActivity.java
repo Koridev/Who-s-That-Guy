@@ -25,7 +25,6 @@ import retrofit.converter.GsonConverter;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
-//    public static final String MOVIE_ID = "MOVIE_ID";
     public static final String MEDIA_TYPE = "MEDIA_TYPE";
     public static final String MOVIE_CREDIT = "MOVIE_CREDIT";
 

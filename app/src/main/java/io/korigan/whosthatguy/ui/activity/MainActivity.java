@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickListe
 
     //State
     private MDBMovie mSelectedMovie;
-//    private MDBMediaSearch mMovieSearch;
     private List<MDBMediaSearch> mMediaSearches;
     private MDBCredits mCredits;
 

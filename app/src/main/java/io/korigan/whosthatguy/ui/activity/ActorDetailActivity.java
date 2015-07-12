@@ -38,7 +38,6 @@ public class ActorDetailActivity extends AppCompatActivity {
     private MovieDBService mTMDBService;
 
     private ProgressBar mProgressBar;
-//    private TextView mTVAppearances;
 
     private RecyclerView mAppearancesList;
     private AppearanceAdapter mAppearanceAdapter;

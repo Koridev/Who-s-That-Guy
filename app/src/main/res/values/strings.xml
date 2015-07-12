@@ -14,8 +14,8 @@
     <string name="biography">Biography</string>
     <string name="themoviedborg">"http://themoviedb.org"</string>
     <string name="as">"As "</string>
-    <string name="app_version">"v1.1"</string>
-    <string name="dev_mail">"guillaumeb90@gmail.com"</string>
+    <string name="app_version">"v1.1.1"</string>
+    <string name="dev_mail">"contact@koridev.fr"</string>
     <string name="ask_report">Thank you for reporting any bug or suggestion!</string>
     <string name="close">"Close"</string>
 
